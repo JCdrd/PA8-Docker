@@ -85,7 +85,7 @@ services:
     depends_on:
       - elasticsearch
 
-  httpd:
+  httpd1:
     build:
       context: httpd/
     volumes:
@@ -119,6 +119,77 @@ services:
       - elk
     depends_on:
       - elasticsearch
+
+  httpd2:
+    build:
+      context: httpd/
+    volumes:
+      - type: bind
+        source: ./httpd/config/filebeat.yml
+        target: /etc/filebeat/filebeat.yml
+        read_only: true
+      - type: bind
+        source: ./httpd/config/metricbeat.yml
+        target: /etc/metricbeat/metricbeat.yml
+        read_only: true
+      - type: bind
+        source: ./httpd/config/httpd.conf
+        target: /usr/local/apache2/conf/httpd.conf
+        read_only: true
+      - type: bind
+        source: /var/log/auth.log
+        target: /var/log/auth.log
+        read_only: true
+      # - type: bind
+      #   source: /var/log/syslog
+      #   target: /var/log/syslog
+      #   read_only: true
+      - type: bind
+        source: ./filebeat/config/filebeat.yml
+        target: /usr/share/filebeat/config/kibana.yml
+        read_only: true
+    ports:
+      - "81:80"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+  httpd3:
+    build:
+      context: httpd/
+    volumes:
+      - type: bind
+        source: ./httpd/config/filebeat.yml
+        target: /etc/filebeat/filebeat.yml
+        read_only: true
+      - type: bind
+        source: ./httpd/config/metricbeat.yml
+        target: /etc/metricbeat/metricbeat.yml
+        read_only: true
+      - type: bind
+        source: ./httpd/config/httpd.conf
+        target: /usr/local/apache2/conf/httpd.conf
+        read_only: true
+      - type: bind
+        source: /var/log/auth.log
+        target: /var/log/auth.log
+        read_only: true
+      # - type: bind
+      #   source: /var/log/syslog
+      #   target: /var/log/syslog
+      #   read_only: true
+      - type: bind
+        source: ./filebeat/config/filebeat.yml
+        target: /usr/share/filebeat/config/kibana.yml
+        read_only: true
+    ports:
+      - "82:80"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
 
 networks:
   elk:
