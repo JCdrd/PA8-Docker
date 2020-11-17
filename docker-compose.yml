@@ -100,16 +100,19 @@ services:
       - type: bind
         source: ./httpd/config/httpd.conf
         target: /usr/local/apache2/conf/httpd.conf
-        read_only: true      
+        read_only: true
       - type: bind
         source: /var/log/auth.log
         target: /var/log/auth.log
         read_only: true
+      # - type: bind
+      #   source: /var/log/syslog
+      #   target: /var/log/syslog
+      #   read_only: true
       - type: bind
-        source: /var/log/syslog    
-        target: /var/log/syslog                 
+        source: ./filebeat/config/filebeat.yml
+        target: /usr/share/filebeat/config/kibana.yml
         read_only: true
-
     ports:
       - "80:80"
     networks:
